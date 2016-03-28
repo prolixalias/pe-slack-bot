@@ -1,0 +1,6 @@
+require 'slack-ruby-bot'
+require 'puppet'
+require 'puppetdb'
+require '../pe-slack-bot/commands/calculate'
+require '../pe-slack-bot/commands/version'
+require '../pe-slack-bot/bot'
