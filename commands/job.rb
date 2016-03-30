@@ -69,11 +69,11 @@ module PESlackBot
             when 'run'
 	      request = Net::HTTP::Post.new("/orchestrator/v1/command/deploy")
 	      if match[:argument].include?('noop') || match[:mode].include?('noop')
-	        noop = 'noop: true'
+	        noop = ', noop: true'
 	      end
 	      if match[:argument] =~ /^[A-Z]\w+\['\w+'\]/
-	        target = "target: #{match[:argument]}"
-	      parameters = { environment: match[:mode], noop, target}.to_json
+	        target = ", target: #{match[:argument]}"
+	      parameters = "{ environment: #{match[:mode]} #{target} #{noop}}".to_json
 	      client.say(channel: data.channel, text: parameters)
 
 
