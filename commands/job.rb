@@ -28,7 +28,11 @@ module PESlackBot
 	      if match[:noun]=='limit'
 	        i = jobcount - match[:argument].to_i
 	      else
-	        i = jobcount - 5
+                if (jobcount - 5) > 0
+                  i = jobcount - 5
+                else
+                  i = 0
+                end
 	      end
 	      while i < jobcount do
 	        job = jobs["items"][i]
@@ -70,13 +74,17 @@ module PESlackBot
               request.add_field("X-Authentication", token)
               response = orch.request(request)
               nodes = JSON.parse(response.body)
-              nodecount = jobs["items"].count
+              nodecount = nodes["items"].count
               if match[:argument]=='limit'
                 i = nodecount - match[:mode].to_i
               else
-                i = nodecount - 5
+                if (nodecount - 5) > 0
+                  i = nodecount - 5
+                else
+                  i = 0
               end
-              while i < nodecount do
+              end
+              while (i < nodecount) do
                 node = nodes["items"][i]
               #for job in jobs["items"] do
                 case node['state']
@@ -86,7 +94,7 @@ module PESlackBot
                     color = '#FFD801'
                   when 'finished'
                     color = '#82C045'
-                  when 'failed'
+                  when 'errored'
                     color = '#AD2927'
                   else
                     color = '#FFFFFF'
