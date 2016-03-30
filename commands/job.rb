@@ -28,7 +28,7 @@ module PESlackBot
 	      jobcount = jobs["items"].count
 	      max = 5
 	      i = 0
-	      while $i < $num do
+	      while i < num do
 	        job = jobs["items"][i]
               #for job in jobs["items"] do
                 case job['state']
@@ -52,13 +52,14 @@ module PESlackBot
                     text: "#{job['state']} on #{job['timestamp']} in #{job['environment']['name']} #{mode}",
                     color: color
               )
-                client.web_client.chat_postMessage(
-                  channel: data.channel,
-                  as_user: true,
-                  attachments: attachments
-              )
-	      $i += 1
-              end
+	      i += 1
+	      end
+
+              client.web_client.chat_postMessage(
+                channel: data.channel,
+                as_user: true,
+                attachments: attachments
+	      )
             when 'run'
               #run a particular job. Requires at least environment as noun and an optional application as argument and noop flag as mode 
             when 'show'
