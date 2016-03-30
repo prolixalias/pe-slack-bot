@@ -70,12 +70,12 @@ module PESlackBot
 	      request = Net::HTTP::Post.new("/orchestrator/v1/command/deploy")
               request.add_field("X-Authentication", token)
 	      if match[:argument].include?('noop') || match[:mode].include?('noop')
-	        noop = ', noop: true'
+	        noop = ', "noop": "true"'
 	      end
 	      if match[:argument] =~ /^[A-Z]\w+\['\w+'\]/
-	        target = ", target: #{match[:argument]}"
+	        target = ", \"target\": \"#{match[:argument]}\""
 	      end
-	      request.body = "{ environment: #{match[:noun]} #{target} #{noop}}".to_json
+	      request.body = "{ \"environment\": \"#{match[:noun]}\" #{target} #{noop}}".to_json
 	      response = orch.request(request)
 	      if response.code=='200'
 		job = JSON.parse(response.body)
