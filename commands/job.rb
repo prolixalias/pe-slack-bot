@@ -75,13 +75,14 @@ module PESlackBot
 	      if match[:argument] =~ /^[A-Z]\w+\['\w+'\]/
 	        target = ", \"target\": \"#{match[:argument]}\""
 	      end
-	      request.body = "{ \"environment\": \"#{match[:noun]}\" #{target} #{noop}}".to_json
+	      parameters = "{ \"environment\": \"#{match[:noun]}\"#{target}#{noop}}"
+	      request.body = parameters
 	      response = orch.request(request)
-	      if response.code=='200'
+	      if response.code.to_i.between?(199,299)
 		job = JSON.parse(response.body)
-	        client.say(channel: data.channel, text: "Job #{job[0]['name']} sent to the orchestrator, type puppet job show #{job[0]['name']} to see more details")
+	        client.say(channel: data.channel, text: "Job #{job['job']['name']} sent to the orchestrator, type puppet job show #{job['job']['name']} to see more details")
 	      else
-		client.say(channel: data.channel, text: "Error sending job to the orchestrator: #{response.body}")
+		client.say(channel: data.channel, text: "Error sending job to the orchestrator: #{response.body}\n #{parameters}")
 	      end
               #run a particular job. Requires at least environment as noun and an optional application as argument and noop flag as mode 
             when 'show'
