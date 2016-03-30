@@ -24,7 +24,13 @@ module PESlackBot
               request.add_field("X-Authentication", token)
               response = orch.request(request)
               jobs = JSON.parse(response.body)
-              for job in jobs["items"] do
+	      jobs["items"].reverse
+	      jobcount = jobs["items"].count
+	      max = 5
+	      i = 0
+	      while $i < $num do
+	        job = jobs["items"][i]
+              #for job in jobs["items"] do
                 case job['state']
                   when 'running'
                     color = '#4683A6'
@@ -51,6 +57,7 @@ module PESlackBot
                   as_user: true,
                   attachments: attachments
               )
+	      $i += 1
               end
             when 'run'
               #run a particular job. Requires at least environment as noun and an optional application as argument and noop flag as mode 
