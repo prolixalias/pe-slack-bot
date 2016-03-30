@@ -65,7 +65,46 @@ module PESlackBot
             when 'run'
               #run a particular job. Requires at least environment as noun and an optional application as argument and noop flag as mode 
             when 'show'
-              #show the status of a particular job, list nodes, their status(es) and shit
+              attachments = Array.new
+              request = Net::HTTP::Get.new("/orchestrator/v1/jobs/#{match[:noun]}/nodes")
+              request.add_field("X-Authentication", token)
+              response = orch.request(request)
+              nodes = JSON.parse(response.body)
+              nodecount = jobs["items"].count
+              if match[:argument]=='limit'
+                i = nodecount - match[:mode].to_i
+              else
+                i = nodecount - 5
+              end
+              while i < nodecount do
+                node = nodes["items"][i]
+              #for job in jobs["items"] do
+                case node['state']
+                  when 'running'
+                    color = '#4683A6'
+                  when 'stopped'
+                    color = '#FFD801'
+                  when 'finished'
+                    color = '#82C045'
+                  when 'failed'
+                    color = '#AD2927'
+                  else
+                    color = '#FFFFFF'
+                  end
+                  attachments.push(
+                    fallback: "Node #{node['name']} #{node['state']} on #{node['timestamp']}",
+                    title: "Node #{node['name']}",
+                    text: "#{node['state']} on #{node['timestamp']}",
+                    color: color
+              )
+              i += 1
+              end
+            client.web_client.chat_postMessage(
+              channel: data.channel,
+              as_user: true,
+              attachments: attachments
+            )
+            client.say(channel: data.channel, text: "Of a total #{nodecount} nodes")
           else
             client.say(channel: data.channel, text: "Can't say I know how to do that")
           end
