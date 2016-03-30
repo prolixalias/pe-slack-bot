@@ -24,11 +24,13 @@ module PESlackBot
               request.add_field("X-Authentication", token)
               response = orch.request(request)
               jobs = JSON.parse(response.body)
-	      jobs["items"].reverse
 	      jobcount = jobs["items"].count
-	      max = 5
-	      i = 0
-	      while i < num do
+	      if match[:noun]=='limit'
+	        i = jobcount - match[:argument].to_i
+	      else
+	        i = jobcount - 5
+	      end
+	      while i < jobcount do
 	        job = jobs["items"][i]
               #for job in jobs["items"] do
                 case job['state']
