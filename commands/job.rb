@@ -68,6 +68,7 @@ module PESlackBot
 	      )
             when 'run'
 	      request = Net::HTTP::Post.new("/orchestrator/v1/command/deploy")
+              request.add_field("X-Authentication", token)
 	      if match[:argument].include?('noop') || match[:mode].include?('noop')
 	        noop = ', noop: true'
 	      end
