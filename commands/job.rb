@@ -1,7 +1,7 @@
 module PESlackBot
   module Commands
     class Job < SlackRubyBot::Commands::Base
-      match(/^(?<bot>\w*)\sjob\s(?<verb>\w*)(\s|$)(?<noun>\w*)(\s|$)(?<argument>\w*)(\s|$)(?<mode>\w*)$/) do |client, data, match|
+      match(/^(?<bot>\w*)\sjob\s(?<verb>\w*)(\s|$)(?<noun>\w*)(\s|$)(?<argument>\w*|[A-Z]\w+\['\w+'\])(\s|$)(?<mode>\w*)$/) do |client, data, match|
         if (Puppet.settings[:confdir]) then
           configfile = File.join([File.dirname(Puppet.settings[:confdir]), "peslackbot.yaml"])
         else
@@ -73,6 +73,7 @@ module PESlackBot
 	      end
 	      if match[:argument] =~ /^[A-Z]\w+\['\w+'\]/
 	        target = ", target: #{match[:argument]}"
+	      end
 	      parameters = "{ environment: #{match[:mode]} #{target} #{noop}}".to_json
 	      client.say(channel: data.channel, text: parameters)
 
