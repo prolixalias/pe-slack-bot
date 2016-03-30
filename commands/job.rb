@@ -73,7 +73,7 @@ module PESlackBot
               request = Net::HTTP::Get.new("/orchestrator/v1/jobs/#{match[:noun]}/nodes")
               request.add_field("X-Authentication", token)
               response = orch.request(request)
-	      if response.code == 200
+	      if response.code == '200'
                 nodes = JSON.parse(response.body)
                 nodecount = nodes["items"].count
                 if match[:argument]=='limit'
