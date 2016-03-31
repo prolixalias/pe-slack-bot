@@ -7,4 +7,4 @@ This is still under heavy development and may/may not work or even do anything a
 I'll write documentation in due course.
 
 ## How does it look like
-<img alt="puppet status node screenshot" src="https://raw.githubusercontent.com/ncorrare/pe-slack-bot/master/docs/pe-slack-bot.gif">
+<img alt="puppet status node screenshot" src="http://g.recordit.co/D0soiMMLFQ.gif">
