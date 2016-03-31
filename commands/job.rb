@@ -21,21 +21,25 @@ module PESlackBot
             when 'list'
               attachments = Array.new
 	      if match[:noun]=='limit'
-	        i = jobcount - match[:argument].to_i
                 request = Net::HTTP::Get.new("/orchestrator/v1/jobs?limit=#{match[:argument]}")
 	      else
                 request = Net::HTTP::Get.new("/orchestrator/v1/jobs?limit=5")
+	      end
+              response = orch.request(request)
+              jobs = JSON.parse(response.body)
+	      jobcount = jobs["items"].count
+              request.add_field("X-Authentication", token)
+	      attachments = Array.new
+	      if match[:noun]=='limit'
+	        i = jobcount - match[:argument].to_i
+	      else
                 if (jobcount - 5) > 0
                   i = jobcount - 5
                 else
                   i = 0
                 end
 	      end
-              response = orch.request(request)
-              jobs = JSON.parse(response.body)
-	      jobcount = jobs["items"].count
-              request.add_field("X-Authentication", token)
-	      while i < jobcount do
+              while i < jobcount do
 	        job = jobs["items"][i]
               #for job in jobs["items"] do
                 case job['state']
