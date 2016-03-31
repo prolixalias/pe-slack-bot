@@ -8,6 +8,8 @@ require 'web'
 
 Thread.abort_on_exception = true
 
+SlackRubyBot::Client.logger.level = Logger::WARN
+
 Thread.new do
   begin
     PESlackBot::Bot.run
