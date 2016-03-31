@@ -54,8 +54,10 @@ module PESlackBot
                   else
                     color = '#FFFFFF'
                   end
-                  if job['options']['noop'] == 'true'
+                  if job['options']['noop'] =~ (/true/)
                     mode='in noop mode'
+                  else
+                    mode='in enforcing mode'
                   end
                   attachments.push(
                     fallback: "Job #{job['name']} #{job['state']} on #{job['timestamp']} in #{job['environment']['name']} by #{job['owner']['login']} #{mode}",
