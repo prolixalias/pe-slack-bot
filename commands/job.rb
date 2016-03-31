@@ -25,10 +25,10 @@ module PESlackBot
 	      else
                 request = Net::HTTP::Get.new("/orchestrator/v1/jobs?limit=5")
 	      end
+              request.add_field("X-Authentication", token)
               response = orch.request(request)
               jobs = JSON.parse(response.body)
 	      jobcount = jobs["items"].count
-              request.add_field("X-Authentication", token)
 	      attachments = Array.new
 	      if match[:noun]=='limit'
 	        i = jobcount - match[:argument].to_i
