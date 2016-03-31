@@ -54,7 +54,7 @@ module PESlackBot
                   else
                     color = '#FFFFFF'
                   end
-                  if job['options']['noop']=='true'
+                  if job['options']['noop'] == 'true'
                     mode='in noop mode'
                   end
                   attachments.push(
