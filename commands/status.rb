@@ -10,13 +10,13 @@ module PESlackBot
         raise(ParseError, "PeSlackBot config file #{configfile} not readable") unless File.exist?(configfile)
         config = YAML.load_file(configfile)
 	host = config['puppetdbhost']
-	pdb = Net::HTTP.new(host, 8080)
-	#pdb.use_ssl = true
-	#pdb.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        #privkeyraw = File.read(config['hostprivkey'])
-        #certraw = File.read(config['hostpubkey'])
-	#pdb.cert = OpenSSL::X509::Certificate.new(certraw)
-	#pdb.key = OpenSSL::PKey::RSA.new(privkeyraw)
+	pdb = Net::HTTP.new(host, 8081)
+	pdb.use_ssl = true
+	pdb.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        privkeyraw = File.read(config['hostprivkey'])
+        certraw = File.read(config['hostpubkey'])
+	pdb.cert = OpenSSL::X509::Certificate.new(certraw)
+	pdb.key = OpenSSL::PKey::RSA.new(privkeyraw)
 	request = Net::HTTP::Get.new("/pdb/query/v4/nodes/#{match[:expression]}")
 	response = pdb.request(request)
 	if response.code == '200'
