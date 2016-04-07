@@ -5,7 +5,6 @@ gem 'puma'
 gem 'sinatra'
 gem 'dotenv'
 gem 'puppet'
-gem 'puppetdb-ruby'
 
 group :development, :test do
   gem 'rake'
