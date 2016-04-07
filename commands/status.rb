@@ -9,6 +9,7 @@ module PESlackBot
         end
         raise(ParseError, "PeSlackBot config file #{configfile} not readable") unless File.exist?(configfile)
         config = YAML.load_file(configfile)
+	host = config['puppetdbhost']
 	pdb = Net::HTTP.new(host, 8081)
 	pdb.use_ssl = true
 	pdb.verify_mode = OpenSSL::SSL::VERIFY_NONE
